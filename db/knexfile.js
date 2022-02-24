@@ -12,7 +12,6 @@ module.exports = {
       database: process.env.DB_NAME || "lendsqr_mini",
     },
     debug: true,
-    useNullAsDefault: true,
   },
   test: {
     ...defaultConfig,
@@ -20,6 +19,5 @@ module.exports = {
       ...defaultConfig.connection,
       database: process.env.TEST_DB_NAME || "lendsqr_mini_test",
     },
-    useNullAsDefault: true,
   },
 };

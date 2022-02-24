@@ -1,3 +1,5 @@
+// TODO: added db credentials here because seeding wasn't working without it...
+
 module.exports = {
   client: "mysql2",
   connection: {
@@ -16,4 +18,5 @@ module.exports = {
   seeds: {
     directory: "db/seeds",
   },
+  useNullAsDefault: true,
 };
