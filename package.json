@@ -4,10 +4,10 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon ./index.js",
-    "migrate": "knex migrate:latest --knexfile db/knexfile.js",
-    "migrate:rollback": "knex migrate:rollback --knexfile db/knexfile.js",
-    "migrate:reset": "knex migrate:rollback --all --knexfile db/knexfile.js",
-    "seed": "knex seed:run --knexfile db/knexfile.js",
+    "migrate": "node -r dotenv/config ./node_modules/knex/bin/cli.js migrate:latest --knexfile db/knexfile.js",
+    "migrate:rollback": "node -r dotenv/config ./node_modules/knex/bin/cli.js migrate:rollback --knexfile db/knexfile.js",
+    "migrate:reset": "node -r dotenv/config ./node_modules/knex/bin/cli.js migrate:rollback --all --knexfile db/knexfile.js",
+    "seed": "node -r dotenv/config ./node_modules/knex/bin/cli.js seed:run --knexfile db/knexfile.js",
     "test": "jest",
     "test:cov": "jest --coverage"
   },

@@ -3,7 +3,6 @@ const defaultConfig = require("../config/knex");
 
 const database = "lendsqr_mini_test";
 
-// Create the database
 async function createTestDatabase() {
   const knex = Knex({
     ...defaultConfig,
@@ -25,6 +24,13 @@ async function migrateDatabase() {
     connection: {
       ...defaultConfig.connection,
       database: process.env.TEST_DB_NAME || "lendsqr_mini_test",
+    },
+    migrations: {
+      tableName: "knex_migrations",
+      directory: "db/migrations",
+    },
+    seeds: {
+      directory: "db/seeds",
     },
   });
 
