@@ -3,12 +3,21 @@ const { SCHEMAS } = require("../db/schema.constant");
 const { walletModel } = require("./wallet.model");
 
 class User {
+  /**
+   * @returns {array} users
+   */
   async getUsers() {
     return knex(SCHEMAS.User).join(SCHEMAS.Wallet, {
-      "users.id": "wallet.userId",
+      "users.id": "wallets.userId",
     });
   }
 
+  /**
+   * @param {number} id
+   * @param {object} populate
+   * @param {bool} populateWallet
+   * @returns user
+   */
   async findUserById(id, populate = {}, populateWallet = false) {
     const user = await knex(SCHEMAS.User)
       .select({
@@ -21,6 +30,13 @@ class User {
       .where({ id })
       .first();
 
+    if (!user) {
+      throw {
+        status: 404,
+        message: "User is not found",
+      };
+    }
+
     if (user && populateWallet) {
       const wallet = await walletModel.findUserWallet(id);
       user.wallet = wallet;
@@ -29,19 +45,40 @@ class User {
     return user;
   }
 
-  async findUserByEmail(email) {
-    return knex(SCHEMAS.User).where({ email }).first();
+  /**
+   * @param {string} email
+   * @returns user
+   */
+  async findUserByEmail(email, validate = true) {
+    const user = await knex(SCHEMAS.User).where({ email }).first();
+
+    if (!user && validate) {
+      throw {
+        status: 404,
+        message: `User with email ${email} is not found`,
+      };
+    }
+
+    return user;
   }
 
+  /**
+   * @param {int} id
+   * @param {object} payload
+   * @returns user
+   */
   async updateUser(id, payload) {
     return knex(SCHEMAS.User)
       .where({ id })
       .update({ ...payload });
   }
 
+  /**
+   * @param {object} payload
+   */
   async createUser(payload) {
     try {
-      const isExist = await this.findUserByEmail(payload.email);
+      const isExist = await this.findUserByEmail(payload.email, false);
 
       if (isExist) {
         throw {
@@ -49,6 +86,8 @@ class User {
           message: "User with this email already exist",
         };
       }
+
+      let userId;
 
       await knex.transaction(async (trx) => {
         const [id] = await knex(SCHEMAS.User)
@@ -60,7 +99,11 @@ class User {
         await knex(SCHEMAS.Wallet)
           .insert({ ...walletPayload })
           .transacting(trx);
+
+        userId = id;
       });
+
+      return this.findUserById(userId, {}, true);
     } catch (error) {
       throw error;
     }
@@ -78,6 +121,12 @@ class User {
     return walletModel.updateWallet(user.wallet.id, newBalance);
   }
 
+  /**
+   * @param {object} user
+   * @param {int} recipient
+   * @param {int} amount
+   * @returns walletDoc
+   */
   async transferFund(user, recipient, amount) {
     if (+amount <= 0) {
       throw {
@@ -93,10 +142,17 @@ class User {
       };
     }
 
-    if (user.wallet.balance < amount) {
+    if (user.wallet.balance < +amount) {
       throw {
         status: 400,
         message: "Your account balance is not sufficient",
+      };
+    }
+
+    if (+amount > user.wallet.balance) {
+      throw {
+        status: 400,
+        message: "Amount is greater than your account balance",
       };
     }
 
