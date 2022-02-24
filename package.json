@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon ./index.js",
+    "start": "NODE_ENV=development nodemon build/index.js",
+    "build": "webpack",
     "migrate": "node -r dotenv/config ./node_modules/knex/bin/cli.js migrate:latest --knexfile db/knexfile.js",
     "migrate:rollback": "node -r dotenv/config ./node_modules/knex/bin/cli.js migrate:rollback --knexfile db/knexfile.js",
     "migrate:reset": "node -r dotenv/config ./node_modules/knex/bin/cli.js migrate:rollback --all --knexfile db/knexfile.js",
@@ -27,7 +28,12 @@
     "supertest": "^6.2.2"
   },
   "devDependencies": {
+    "babel-core": "^6.26.3",
     "jest": "^27.5.1",
-    "nodemon": "^2.0.15"
+    "nodemon": "^2.0.15",
+    "webpack": "^5.69.1",
+    "webpack-cli": "^4.9.2",
+    "webpack-node-externals": "^3.0.0",
+    "webpack-shell-plugin": "^0.5.0"
   }
 }
