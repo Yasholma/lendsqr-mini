@@ -1,0 +1,3 @@
+## Lendsqr Mini
+
+signature -> **codexy**
