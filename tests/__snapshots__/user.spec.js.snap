@@ -4,21 +4,17 @@ exports[`user - and - auth should fail to find user by email 1`] = `"User with e
 
 exports[`user - and - auth should fail to find user by id 1`] = `"User is not found"`;
 
-exports[`user - and - auth should fail to fund account if amount is 0 or negative 1`] = `"Cannot read properties of undefined (reading 'balance')"`;
+exports[`user - and - auth should fail to fund account if amount is 0 or negative 1`] = `"Amount must be greater than 0"`;
 
-exports[`user - and - auth should fail to fund account if amount is 0 or negative 2`] = `"Cannot read properties of undefined (reading 'balance')"`;
+exports[`user - and - auth should fail to fund account if amount is 0 or negative 2`] = `"Amount must be greater than 0"`;
 
 exports[`user - and - auth should fail to transfer fund <= 0 1`] = `"Amount must be greater than 0"`;
 
 exports[`user - and - auth should fail to transfer fund <= 0 2`] = `"Amount must be greater than 0"`;
 
-exports[`user - and - auth should fail to transfer fund eqaul to or less than 0 1`] = `"Amount must be greater than 0"`;
-
-exports[`user - and - auth should fail to transfer fund eqaul to or less than 0 2`] = `"Amount must be greater than 0"`;
-
 exports[`user - and - auth should fail to transfer fund higher than current balance 1`] = `"Your account balance is not sufficient"`;
 
-exports[`user - and - auth should fail to transfer fund to an invalid recipient 1`] = `"Your account balance is not sufficient"`;
+exports[`user - and - auth should fail to transfer fund to an invalid recipient 1`] = `"User is not found"`;
 
 exports[`user - and - auth should fail to withdraw if amount is  > account balance 1`] = `"Your account balance is not sufficient"`;
 
