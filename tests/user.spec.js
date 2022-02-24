@@ -101,11 +101,11 @@ describe("user - and - auth", () => {
 
   it("should fail to fund account if amount is 0 or negative", async () => {
     await expect(
-      userModel.fundAccount(0)
+      userModel.fundAccount(userOne.record, 0)
     ).rejects.toThrowErrorMatchingSnapshot();
 
     await expect(
-      userModel.fundAccount(-100)
+      userModel.fundAccount(userOne.record, -100)
     ).rejects.toThrowErrorMatchingSnapshot();
   });
 
@@ -138,7 +138,7 @@ describe("user - and - auth", () => {
   it("should fail to transfer fund to an invalid recipient", async () => {
     const invalidUser = 1000;
     await expect(
-      userModel.transferFund(userOne.record, invalidUser, 5000)
+      userModel.transferFund(userOne.record, invalidUser, 50)
     ).rejects.toThrowErrorMatchingSnapshot();
   });
 
