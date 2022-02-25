@@ -7,9 +7,17 @@ class User {
    * @returns {array} users
    */
   async getUsers() {
-    return knex(SCHEMAS.User).join(SCHEMAS.Wallet, {
+    const users = await knex(SCHEMAS.User).join(SCHEMAS.Wallet, {
       "users.id": "wallets.userId",
     });
+
+    return users.map(({ id, name, email, balance, created_at }) => ({
+      id,
+      name,
+      email,
+      created_at,
+      wallet: { balance },
+    }));
   }
 
   /**
