@@ -8,6 +8,8 @@ Lendsqr Assessment, Simple node js with mysql that provides endpoints for fake u
 
 > install packages -> `yarn install`
 
+> Database Setup Required -> MySQL - start server locally then continue to next step
+
 > run migrations -> `yarn run migrate`
 
 > start server -> `yarn start`
