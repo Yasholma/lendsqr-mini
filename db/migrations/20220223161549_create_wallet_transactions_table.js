@@ -20,7 +20,9 @@ exports.up = function (knex) {
       .references("id")
       .inTable(SCHEMAS.Wallet);
     table.float("amount").notNullable();
-    table.enum("type", ["fund", "withdraw", "transfer"]).notNullable();
+    table
+      .enum("type", ["fund", "withdraw", "transfer", "receive"])
+      .notNullable();
     table
       .integer("userId")
       .unsigned()

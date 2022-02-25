@@ -1,6 +1,7 @@
 const { knex } = require("../db");
 const { SCHEMAS } = require("../db/schema.constant");
 const { walletModel } = require("./wallet.model");
+const { walletTransactionModel } = require("./wallet_transaction.model");
 
 class User {
   /**
@@ -126,7 +127,20 @@ class User {
     }
 
     const newBalance = user.wallet.balance + amount;
-    return walletModel.updateWallet(user.wallet.id, newBalance);
+    const updatedWallet = await walletModel.updateWallet(
+      user.wallet.id,
+      newBalance
+    );
+
+    walletTransactionModel.create({
+      sourceWallet: user.wallet.id,
+      destinationWallet: user.wallet.id,
+      amount: amount,
+      type: "fund",
+      userId: user.id,
+    });
+
+    return updatedWallet;
   }
 
   /**
@@ -175,6 +189,22 @@ class User {
 
     await walletModel.transferFund(user.wallet, recipientRecord.wallet, amount);
 
+    walletTransactionModel.create({
+      sourceWallet: user.wallet.id,
+      destinationWallet: recipientRecord.wallet.id,
+      amount: amount,
+      type: "transfer",
+      userId: user.id,
+    });
+
+    walletTransactionModel.create({
+      sourceWallet: user.wallet.id,
+      destinationWallet: recipientRecord.wallet.id,
+      amount: amount,
+      type: "receive",
+      userId: recipientRecord.id,
+    });
+
     return recipientRecord;
   }
 
@@ -199,7 +229,20 @@ class User {
     }
 
     const newBalance = user.wallet.balance - requestedAmount;
-    return walletModel.updateWallet(user.wallet.id, newBalance);
+    const updatedWallet = await walletModel.updateWallet(
+      user.wallet.id,
+      newBalance
+    );
+
+    walletTransactionModel.create({
+      sourceWallet: user.wallet.id,
+      destinationWallet: user.wallet.id,
+      amount: requestedAmount,
+      type: "withdraw",
+      userId: user.id,
+    });
+
+    return updatedWallet;
   }
 }
 
